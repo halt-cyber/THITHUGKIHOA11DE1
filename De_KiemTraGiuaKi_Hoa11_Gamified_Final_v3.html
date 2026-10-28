@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điệp Vụ: Kiểm Tra Giữa Kì I - Hóa 11</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e3a8a; 
+            --primary-light: #3b82f6;
+            --secondary: #dc2626; 
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --success: #10b981;
+            --danger: #ef4444;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background-color: var(--bg); color: var(--text-main); margin: 0; padding: 15px 10px; display: flex; justify-content: center; line-height: 1.6; }
+        .container { max-width: 850px; width: 100%; }
+
+        .card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); border-top: 5px solid var(--primary); }
+        .header-card { text-align: center; background: linear-gradient(135deg, #0f172a, #1e3a8a); color: white; border-top: none; }
+        .header-card h1 { margin: 0 0 5px 0; font-size: 1.8rem; text-transform: uppercase; color: #f87171; }
+        .header-card h2 { margin: 0 0 15px 0; font-size: 1.1rem; font-weight: 500; opacity: 0.9; }
+        
+        .student-info { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; }
+        .student-info input { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; text-align: center;}
+
+        h3 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; text-transform: uppercase; font-size: 1.2rem;}
+        
+        input[type="text"], select { width: 100%; padding: 10px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 15px; transition: 0.3s; font-family: 'Roboto', sans-serif;}
+        input[type="text"]:focus, select:focus { border-color: var(--primary); outline: none; }
+
+        .question { margin-bottom: 20px; background: #f9fafb; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; }
+        .question-text { font-weight: bold; margin-top: 0; margin-bottom: 12px; font-size: 1.05rem; }
+
+        .options label { display: flex; align-items: center; margin-bottom: 8px; cursor: pointer; padding: 10px; border-radius: 6px; background: #fff; border: 1px solid #e5e7eb; transition: 0.2s; }
+        .options label:hover { background: #f3f4f6; }
+        .options input[type="radio"] { margin-right: 10px; transform: scale(1.2); }
+        
+        .tf-grid { display: grid; grid-template-columns: 3fr 1fr; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dashed #e5e7eb; }
+        .tf-opts { display: flex; gap: 10px; justify-content: flex-end; }
+        .tf-opts label { background: #fff; padding: 6px 12px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; font-size: 0.9rem; cursor: pointer;}
+        
+        .btn-submit { width: 100%; border: none; padding: 16px; font-size: 16px; border-radius: 30px; cursor: pointer; font-weight: bold; text-transform: uppercase; color: white; background: linear-gradient(135deg, var(--secondary), #991b1b); box-shadow: 0 4px 6px rgba(220, 38, 38, 0.3); margin-top: 20px;}
+        .btn-checkpoint { width: 100%; border: none; padding: 16px; font-size: 16px; border-radius: 12px; cursor: pointer; font-weight: bold; text-transform: uppercase; color: white; background: linear-gradient(135deg, #059669, #047857); box-shadow: 0 4px 6px rgba(5, 150, 105, 0.3); margin-top: 20px; transition: 0.3s;}
+        
+        .section-locked { display: none; opacity: 0; transition: opacity 1s ease-in-out; }
+        
+        #timer-box { font-size: 1.5rem; font-weight: bold; color: #fef08a; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; margin-top: 10px; display: inline-block; }
+
+        @media(max-width: 600px) { 
+            .student-info { grid-template-columns: 1fr; } 
+            .tf-grid { grid-template-columns: 1fr; }
+            .tf-opts { justify-content: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="card header-card">
+            <h1>HỒ SƠ TỔNG KẾT</h1>
+            <h2>CHUYÊN ÁN HÓA 11: KIỂM TRA GIỮA KÌ I</h2>
+            
+            <div id="timer-box">⏳ 45:00</div> 
+            
+            <div style="margin-top: 15px; display: flex; justify-content: center; gap: 10px;">
+                <button type="button" id="btnSound" onclick="toggleSound()" style="background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: 0.3s;">
+                    🔊 Âm thanh: BẬT
+                </button>
+            </div>
+            
+            <p style="font-style: italic; color: #e2e8f0; font-size: 0.9rem; margin-top: 10px;">* Hệ thống giám sát gian lận đã được kích hoạt. Không thoát màn hình.</p>
+            <div class="student-info">
+                <input type="text" id="studentName" placeholder="Mã định danh thám tử (Họ tên)..." required>
+                <input type="text" id="studentClass" placeholder="Đơn vị (Lớp)..." required>
+            </div>
+        </div>
+
+        <form id="quizForm">
+            <!-- PHẦN I -->
+            <div id="part1-section" class="card">
+                <h3>📂 TRẠM 1: CÂU TRẮC NGHIỆM NHIỀU LỰA CHỌN</h3>
+                <p style="font-style: italic; color: #6b7280; margin-top: -10px; margin-bottom: 20px;">* Nhiệm vụ: Trả lời 18 câu hỏi. Bạn phải xác thực để đi tiếp.</p>
+
+                <div class="question check-mcq-p1" data-ans="B"><p class="question-text">Câu 1. Phản ứng nào sau đây là phản ứng thuận nghịch?</p><div class="options"><label><input type="radio" name="p1_q1" value="A"> A. 2KClO<sub>3</sub> &rarr; 2KCl + 3O<sub>2</sub>.</label><label><input type="radio" name="p1_q1" value="B"> B. N<sub>2</sub>(g) + O<sub>2</sub>(g) &#8652; 2NO(g).</label><label><input type="radio" name="p1_q1" value="C"> C. CH<sub>4</sub> + 2O<sub>2</sub> &rarr; CO<sub>2</sub> + 2H<sub>2</sub>O.</label><label><input type="radio" name="p1_q1" value="D"> D. Fe + 2HCl &rarr; FeCl<sub>2</sub> + H<sub>2</sub>.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="C"><p class="question-text">Câu 2. Chất điện li mạnh là những chất khi tan vào nước thì</p><div class="options"><label><input type="radio" name="p1_q2" value="A"> A. không phân li thành ion.</label><label><input type="radio" name="p1_q2" value="B"> B. chỉ một phần các phân tử tan phân li thành ion.</label><label><input type="radio" name="p1_q2" value="C"> C. phân li hoàn toàn thành ion.</label><label><input type="radio" name="p1_q2" value="D"> D. phân huỷ thành các chất mới.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="B"><p class="question-text">Câu 3. Trong tự nhiên, nguyên tố nitrogen (N) tồn tại ở dạng nào sau đây?</p><div class="options"><label><input type="radio" name="p1_q3" value="A"> A. Chỉ tồn tại ở dạng đơn chất.</label><label><input type="radio" name="p1_q3" value="B"> B. Tồn tại ở cả dạng đơn chất và dạng hợp chất.</label><label><input type="radio" name="p1_q3" value="C"> C. Chỉ tồn tại ở dạng hợp chất hữu cơ.</label><label><input type="radio" name="p1_q3" value="D"> D. Chỉ tồn tại ở dạng hợp chất vô cơ.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="B"><p class="question-text">Câu 4. Theo thuyết Bronsted-Lowry, chất nào sau đây có vai trò là một acid trong dung dịch?</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q4" value="A"> A. Al<sup>3+</sup>.</label><label><input type="radio" name="p1_q4" value="B"> B. CH<sub>3</sub>COOH.</label><label><input type="radio" name="p1_q4" value="C"> C. NH<sub>3</sub>.</label><label><input type="radio" name="p1_q4" value="D"> D. NaOH.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="B"><p class="question-text">Câu 5. Cấu trúc không gian của phân tử NH<sub>3</sub> có dạng hình</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q5" value="A"> A. chóp tứ giác.</label><label><input type="radio" name="p1_q5" value="B"> B. chóp tam giác.</label><label><input type="radio" name="p1_q5" value="C"> C. tứ diện đều.</label><label><input type="radio" name="p1_q5" value="D"> D. tam giác đều.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="D"><p class="question-text">Câu 6. Muối nào sau đây tan tốt trong nước?</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q6" value="A"> A. MgCO<sub>3</sub>.</label><label><input type="radio" name="p1_q6" value="B"> B. CaCO<sub>3</sub>.</label><label><input type="radio" name="p1_q6" value="C"> C. FeCO<sub>3</sub>.</label><label><input type="radio" name="p1_q6" value="D"> D. (NH<sub>4</sub>)<sub>2</sub>CO<sub>3</sub>.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="B"><p class="question-text">Câu 7. Khí nitrogen trơ về mặt hoá học ở điều kiện thường là do</p><div class="options"><label><input type="radio" name="p1_q7" value="A"> A. Phân tử có liên kết ba, năng lượng liên kết nhỏ.</label><label><input type="radio" name="p1_q7" value="B"> B. Phân tử có liên kết ba, năng lượng liên kết lớn.</label><label><input type="radio" name="p1_q7" value="C"> C. Phân tử có liên kết đôi, năng lượng liên kết lớn.</label><label><input type="radio" name="p1_q7" value="D"> D. Phân tử có liên kết đôi, năng lượng liên kết nhỏ.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="A"><p class="question-text">Câu 8. Cân bằng hoá học là cân bằng động, do khi ở trạng thái cân bằng</p><div class="options"><label><input type="radio" name="p1_q8" value="A"> A. phản ứng thuận và phản ứng nghịch vẫn xảy ra với tốc độ bằng nhau.</label><label><input type="radio" name="p1_q8" value="B"> B. phản ứng nghịch dừng lại nhưng phản ứng thuận vẫn xảy ra.</label><label><input type="radio" name="p1_q8" value="C"> C. phản ứng thuận và phản ứng nghịch đều dừng lại.</label><label><input type="radio" name="p1_q8" value="D"> D. phản ứng thuận dừng lại nhưng phản ứng nghịch vẫn xảy ra.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="C"><p class="question-text">Câu 9. Quá trình đốt cháy hỗn hợp hơi nhiên liệu và không khí trong động cơ khi đánh tia lửa điện sinh ra khí NO, một tác nhân gây ô nhiễm không khí. Tên gọi của NO là</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q9" value="A"> A. ammonia.</label><label><input type="radio" name="p1_q9" value="B"> B. nitrogen dioxide.</label><label><input type="radio" name="p1_q9" value="C"> C. nitrogen monoxide.</label><label><input type="radio" name="p1_q9" value="D"> D. nitrogen.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="A"><p class="question-text">Câu 10. Phương pháp chuẩn độ là phương pháp</p><div class="options"><label><input type="radio" name="p1_q10" value="A"> A. xác định nồng độ của một chất bằng một dung dịch chuẩn đã biết nồng độ.</label><label><input type="radio" name="p1_q10" value="B"> B. xác định nồng độ của một chất bằng một dung dịch chuẩn chưa biết nồng độ.</label><label><input type="radio" name="p1_q10" value="C"> C. xác định nồng độ của một chất bằng sự thay đổi màu sắc của dung dịch chuẩn.</label><label><input type="radio" name="p1_q10" value="D"> D. xác định nồng độ của một chất bằng sự thay đổi màu sắc của chỉ thị thông thường.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="B"><p class="question-text">Câu 11. Dung dịch chất nào sau đây có môi trường trung tính?</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q11" value="A"> A. Fe<sub>2</sub>(SO<sub>4</sub>)<sub>3</sub>.</label><label><input type="radio" name="p1_q11" value="B"> B. Na<sub>2</sub>SO<sub>4</sub>.</label><label><input type="radio" name="p1_q11" value="C"> C. K<sub>2</sub>CO<sub>3</sub>.</label><label><input type="radio" name="p1_q11" value="D"> D. AlCl<sub>3</sub>.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="A"><p class="question-text">Câu 12. Cho cân bằng sau trong hệ kín: 2NO<sub>2</sub> (g, nâu đỏ) &#8652; N<sub>2</sub>O<sub>4</sub> (g, không màu) (phản ứng thuận là phản ứng tỏa nhiệt).<br>Thực hiện 2 thí nghiệm:<br>- (1): Ngâm chìm ống nghiệm vào cốc nước lạnh (nước đá).<br>- (2): Ngâm chìm ống nghiệm vào cốc nước nóng (khoảng 80 <sup>o</sup>C).<br>Sự thay đổi màu nâu đỏ trong ống nghiệm ở (1) và (2) tương ứng là:</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q12" value="A"> A. nhạt đi, đậm lên.</label><label><input type="radio" name="p1_q12" value="B"> B. đậm lên, nhạt đi.</label><label><input type="radio" name="p1_q12" value="C"> C. không thay đổi.</label><label><input type="radio" name="p1_q12" value="D"> D. đều đậm lên.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="D"><p class="question-text">Câu 13. Phát biểu nào sau đây không đúng?</p><div class="options"><label><input type="radio" name="p1_q13" value="A"> A. Muối ammonium dễ tan trong nước.</label><label><input type="radio" name="p1_q13" value="B"> B. Muối ammonium là chất điện li mạnh.</label><label><input type="radio" name="p1_q13" value="C"> C. Muối ammonium kém bền với nhiệt.</label><label><input type="radio" name="p1_q13" value="D"> D. Tất cả dung dịch muối ammonium đều có tính base.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="D"><p class="question-text">Câu 14. Xét cân bằng: NH<sub>3</sub> + H<sub>2</sub>O &#8652; NH<sub>4</sub><sup>+</sup> + OH<sup>-</sup>. Hằng số cân bằng (K<sub>C</sub>) của phản ứng được biểu diễn bằng biểu thức nào sau đây?</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q14" value="A"> A. K<sub>C</sub> = [NH<sub>3</sub>][H<sub>2</sub>O] / [NH<sub>4</sub><sup>+</sup>][OH<sup>-</sup>]</label><label><input type="radio" name="p1_q14" value="B"> B. K<sub>C</sub> = [NH<sub>4</sub><sup>+</sup>][OH<sup>-</sup>] / [NH<sub>3</sub>][H<sub>2</sub>O]</label><label><input type="radio" name="p1_q14" value="C"> C. K<sub>C</sub> = [NH<sub>3</sub>] / [NH<sub>4</sub><sup>+</sup>][OH<sup>-</sup>]</label><label><input type="radio" name="p1_q14" value="D"> D. K<sub>C</sub> = [NH<sub>4</sub><sup>+</sup>][OH<sup>-</sup>] / [NH<sub>3</sub>]</label></div></div>
+                <div class="question check-mcq-p1" data-ans="A"><p class="question-text">Câu 15. Trong các công thức cấu tạo dưới đây, công thức cấu tạo đúng của nitric acid là (biết HNO<sub>3</sub> có 1 liên kết cho nhận):<br>(1) H-O-N(=O)&rarr;O<br>(2) H-O-N(=O)<sub>2</sub><br>(3) H-O-O-N=O<br>(4) H-N(=O)<sub>2</sub>-O</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q15" value="A"> A. (1).</label><label><input type="radio" name="p1_q15" value="B"> B. (2).</label><label><input type="radio" name="p1_q15" value="C"> C. (3).</label><label><input type="radio" name="p1_q15" value="D"> D. (4).</label></div></div>
+                <div class="question check-mcq-p1" data-ans="A"><p class="question-text">Câu 16. Ở nhiệt độ cao: N<sub>2</sub> + 3H<sub>2</sub> &#8652; 2NH<sub>3</sub> (1) và N<sub>2</sub> + O<sub>2</sub> &#8652; 2NO (2). Vai trò của N<sub>2</sub> trong (1) và (2) lần lượt là:</p><div class="options"><label><input type="radio" name="p1_q16" value="A"> A. chất oxi hoá; chất khử.</label><label><input type="radio" name="p1_q16" value="B"> B. chất khử; chất khử.</label><label><input type="radio" name="p1_q16" value="C"> C. chất oxi hoá; chất oxi hoá.</label><label><input type="radio" name="p1_q16" value="D"> D. chất khử; chất oxi hoá.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="D"><p class="question-text">Câu 17. Một dung dịch chứa 0,02 mol Cu<sup>2+</sup>, 0,03 mol K<sup>+</sup>, x mol Cl<sup>–</sup> và y mol SO<sub>4</sub><sup>2–</sup>. Tổng khối lượng các muối tan là 5,435 gam. Giá trị của x và y lần lượt là:</p><div class="options" style="display: grid; grid-template-columns: 1fr 1fr;"><label><input type="radio" name="p1_q17" value="A"> A. 0,01 và 0,03.</label><label><input type="radio" name="p1_q17" value="B"> B. 0,02 và 0,05.</label><label><input type="radio" name="p1_q17" value="C"> C. 0,05 và 0,01.</label><label><input type="radio" name="p1_q17" value="D"> D. 0,03 và 0,02.</label></div></div>
+                <div class="question check-mcq-p1" data-ans="C"><p class="question-text">Câu 18. Phát biểu nào sau đây sai?</p><div class="options"><label><input type="radio" name="p1_q18" value="A"> A. Theo Brønsted–Lowry, trong phản ứng với OH<sup>-</sup>, ion NH<sub>4</sub><sup>+</sup> có vai trò là acid.</label><label><input type="radio" name="p1_q18" value="B"> B. Dùng dung dịch NaOH nhận biết được dung dịch NaCl và NH<sub>4</sub>Cl.</label><label><input type="radio" name="p1_q18" value="C"> C. Trong phân tử ammonia, nguyên tử nitrogen có hai cặp electron chưa liên kết.</label><label><input type="radio" name="p1_q18" value="D"> D. Ammonia dễ tan trong nước vì có khả năng tạo liên kết hydrogen với nước.</label></div></div>
+
+                <button type="button" id="btn-check-p1" class="btn-checkpoint" onclick="checkPart1()">🛑 XÁC THỰC & CHUYỂN TRẠM 2</button>
+            </div>
+
+            <!-- PHẦN II -->
+            <div id="part2-section" class="section-locked">
+                <div class="card">
+                    <h3>📂 TRẠM 2: CÂU TRẮC NGHIỆM ĐÚNG/SAI</h3>
+                    <p style="font-style: italic; color: #6b7280; margin-top: -10px; margin-bottom: 20px;">* Nhiệm vụ: Phân tích 4 nhận định (16 ý). Bạn phải xác thực để đi tiếp.</p>
+
+                    <div class="question">
+                        <p class="question-text">Câu 1. Xét hệ cân bằng: CO(g) + H<sub>2</sub>O(g) &#8652; CO<sub>2</sub>(g) + H<sub>2</sub>(g) (Biết phản ứng thuận là phản ứng tỏa nhiệt).</p>
+                        <div class="tf-grid check-tf-p2" data-ans="T"><span>a) Khi tăng nhiệt độ, cân bằng chuyển dịch theo chiều nghịch.</span><div class="tf-opts"><label><input type="radio" name="p2_q1a" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q1a" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="F"><span>b) Khi thêm khí H<sub>2</sub> vào hệ, cân bằng chuyển dịch theo chiều thuận.</span><div class="tf-opts"><label><input type="radio" name="p2_q1b" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q1b" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="F"><span>c) Tăng áp suất chung (giảm thể tích), cân bằng chuyển dịch theo chiều thuận.</span><div class="tf-opts"><label><input type="radio" name="p2_q1c" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q1c" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="T" style="border:none;"><span>d) Nếu [CO<sub>2</sub>]=[H<sub>2</sub>]=0,074 M và [CO]=[H<sub>2</sub>O]=0,026 M thì hằng số K<sub>C</sub> xấp xỉ 8,1.</span><div class="tf-opts"><label><input type="radio" name="p2_q1d" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q1d" value="F"> SAI</label></div></div>
+                    </div>
+
+                    <div class="question">
+                        <p class="question-text">Câu 2. Đo pH của một cốc nước chanh được giá trị pH = 2,4.</p>
+                        <div class="tf-grid check-tf-p2" data-ans="T"><span>a) Nước chanh có môi trường acid.</span><div class="tf-opts"><label><input type="radio" name="p2_q2a" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q2a" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="F"><span>b) Nồng độ ion [H<sup>+</sup>] của nước chanh là 0,24 mol/L.</span><div class="tf-opts"><label><input type="radio" name="p2_q2b" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q2b" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="T"><span>c) Nồng độ của ion [OH<sup>-</sup>] của nước chanh nhỏ hơn 10<sup>-7</sup> mol/L.</span><div class="tf-opts"><label><input type="radio" name="p2_q2c" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q2c" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="T" style="border:none;"><span>d) Nhúng mẫu giấy quỳ tím vào cốc nước chanh thấy chuyển sang màu đỏ.</span><div class="tf-opts"><label><input type="radio" name="p2_q2d" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q2d" value="F"> SAI</label></div></div>
+                    </div>
+
+                    <div class="question">
+                        <p class="question-text">Câu 3. Cho các tính chất hóa học của ammonia:</p>
+                        <div class="tf-grid check-tf-p2" data-ans="T"><span>a) Tính base của ammonia là do trên nguyên tử N còn cặp electron hóa trị riêng.</span><div class="tf-opts"><label><input type="radio" name="p2_q3a" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q3a" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="F"><span>b) Dung dịch ammonia là base yếu nên không làm phenolphtalein chuyển màu.</span><div class="tf-opts"><label><input type="radio" name="p2_q3b" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q3b" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="F"><span>c) Nguyên tử N có số oxi hóa -3 nên ammonia có cả tính khử và tính oxi hóa.</span><div class="tf-opts"><label><input type="radio" name="p2_q3c" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q3c" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="T" style="border:none;"><span>d) Trong phản ứng giữa ammonia và oxygen, ammonia đóng vai trò là chất khử.</span><div class="tf-opts"><label><input type="radio" name="p2_q3d" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q3d" value="F"> SAI</label></div></div>
+                    </div>
+
+                    <div class="question">
+                        <p class="question-text">Câu 4. Phú dưỡng là hiện tượng nguồn nước dư quá nhiều chất dinh dưỡng.</p>
+                        <div class="tf-grid check-tf-p2" data-ans="T"><span>a) Có thể quan sát được hiện tượng này qua sự xuất hiện dày đặc của tảo xanh.</span><div class="tf-opts"><label><input type="radio" name="p2_q4a" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q4a" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="F"><span>b) Nguồn dinh dưỡng ở ao, hồ thường có nguồn gốc từ nước mưa đọng lại.</span><div class="tf-opts"><label><input type="radio" name="p2_q4b" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q4b" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="F"><span>c) Khi hàm lượng nitrogen và phosphorus đều vượt quá 20 &mu;g/L sẽ gây phú dưỡng.</span><div class="tf-opts"><label><input type="radio" name="p2_q4c" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q4c" value="F"> SAI</label></div></div>
+                        <div class="tf-grid check-tf-p2" data-ans="T" style="border:none;"><span>d) Nước thải, phân bón hóa học, đầm nuôi thủy sản... gây hiện tượng phú dưỡng.</span><div class="tf-opts"><label><input type="radio" name="p2_q4d" value="T"> ĐÚNG</label><label><input type="radio" name="p2_q4d" value="F"> SAI</label></div></div>
+                    </div>
+
+                    <button type="button" id="btn-check-p2" class="btn-checkpoint" onclick="checkPart2()">🛑 XÁC THỰC & CHUYỂN TRẠM 3</button>
+                </div>
+            </div>
+
+            <!-- PHẦN III -->
+            <div id="part3-section" class="section-locked">
+                <div class="card">
+                    <h3>📂 TRẠM 3: CÂU TRẮC NGHIỆM YÊU CẦU TRẢ LỜI NGẮN</h3>
+                    
+                    <div class="question">
+                        <p class="question-text">Câu 1. Có bao nhiêu liên kết cộng hóa trị trong ion ammonium (NH<sub>4</sub><sup>+</sup>)?</p>
+                        <input type="text" class="check-text final-ans" data-ans="4|bốn" placeholder="Nhập một con số...">
+                    </div>
+                    <div class="question">
+                        <p class="question-text">Câu 2. Để chuẩn độ 10 mL dung dịch HCl cần 20 mL dung dịch NaOH 0,1 M. Nồng độ của dung dịch HCl trên là bao nhiêu mol/L?</p>
+                        <input type="text" class="check-text final-ans" data-ans="0,2|0.2" placeholder="Nhập một con số...">
+                    </div>
+                    <div class="question">
+                        <p class="question-text">Câu 3. Trong 5 phản ứng: (a) N<sub>2</sub>+3H<sub>2</sub>&#8652;2NH<sub>3</sub>; (b) H<sub>2</sub>+I<sub>2</sub>&#8652;2HI; (c) 2SO<sub>2</sub>+O<sub>2</sub>&#8652;2SO<sub>3</sub>; (d) N<sub>2</sub>O<sub>4</sub>&#8652;2NO<sub>2</sub>; (e) N<sub>2</sub>+O<sub>2</sub>&#8652;2NO. Có bao nhiêu cân bằng không bị chuyển dịch khi thay đổi áp suất?</p>
+                        <input type="text" class="check-text final-ans" data-ans="3|ba" placeholder="Nhập một con số...">
+                    </div>
+                    <div class="question">
+                        <p class="question-text">Câu 4. Cho các chất khí: NO, NO<sub>2</sub>, N<sub>2</sub>O, SO<sub>2</sub> và N<sub>2</sub>. Có bao nhiêu chất khí là nguyên nhân góp phần gây ra hiện tượng mưa acid?</p>
+                        <input type="text" class="check-text final-ans" data-ans="3|ba" placeholder="Nhập một con số...">
+                    </div>
+                    <div class="question">
+                        <p class="question-text">Câu 5. Hỗn hợp X gồm N<sub>2</sub> và H<sub>2</sub> có tỉ lệ mol tương ứng là 1:4. Nung nóng X trong bình kín thu được hỗn hợp Y có tỉ khối so với H<sub>2</sub> bằng 4. Hiệu suất phản ứng là bao nhiêu phần trăm?</p>
+                        <input type="text" class="check-text final-ans" data-ans="25|25%" placeholder="Nhập một con số...">
+                    </div>
+                    <div class="question">
+                        <p class="question-text">Câu 6. Cho dung dịch HNO<sub>3</sub> loãng tác dụng với các chất: NH<sub>3</sub>, CaCO<sub>3</sub>, Ag, NaOH, Fe<sub>3</sub>O<sub>4</sub>. Có bao nhiêu phản ứng mà HNO<sub>3</sub> thể hiện tính oxi hóa?</p>
+                        <input type="text" class="check-text final-ans" data-ans="2|hai" placeholder="Nhập một con số...">
+                    </div>
+                </div>
+
+                <div id="score-board">
+                    <div id="score-text"></div>
+                    <div id="error-breakdown" class="error-analysis"></div>
+                </div>
+
+                <button type="button" class="btn-submit" onclick="gradeFinal()">🚀 NỘP BÀI THI</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- JS SCRIPTS TỪ TEMPLATE -->
+    <script>
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        let soundEnabled = true;
+
+        function initAudio() { if(!audioCtx) audioCtx = new AudioContext(); if(audioCtx.state === 'suspended') audioCtx.resume(); }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            let btn = document.getElementById('btnSound');
+            if(soundEnabled) { btn.innerHTML = '🔊 Âm thanh: BẬT'; btn.style.background = '#10b981'; initAudio(); sfxClick(); } 
+            else { btn.innerHTML = '🔇 Âm thanh: TẮT'; btn.style.background = '#6b7280'; }
+        }
+
+        function playTone(freq, type, duration, vol=0.1) {
+            if(!soundEnabled) return;
+            initAudio();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function sfxClick() { playTone(600, 'sine', 0.1, 0.05); }
+        function sfxWrong() { playTone(300, 'sawtooth', 0.3, 0.1); setTimeout(() => playTone(250, 'sawtooth', 0.4, 0.1), 200); }
+        function sfxLevelUp() { [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => { setTimeout(() => playTone(f, 'square', 0.2, 0.05), i * 150); }); }
+        function sfxWin() { [523.25, 523.25, 523.25, 659.25, 783.99, 1046.50].forEach((f, i) => { setTimeout(() => playTone(f, 'triangle', 0.3, 0.1), i * 200); }); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('input[type="radio"]').forEach(el => el.addEventListener('change', sfxClick));
+            document.querySelectorAll('input[type="text"]').forEach(el => el.addEventListener('input', () => { if(el.value.length === 1) sfxClick(); }));
+            document.querySelectorAll('select').forEach(el => el.addEventListener('change', sfxClick));
+            document.body.addEventListener('click', initAudio, {once: true});
+        });
+
+        function checkPart1() {
+            let name = document.getElementById('studentName').value;
+            if(!name) { customAlert("Vui lòng nhập Mã định danh trước khi làm bài!"); return; }
+
+            let answered = document.querySelectorAll('.check-mcq-p1 input[type="radio"]:checked').length;
+            if(answered < 18) {
+                let confirmNext = customConfirm(`Bạn mới làm ${answered}/18 câu. Bạn có chắc chắn muốn bỏ qua các câu còn lại để sang Trạm 2 không?`);
+                if(!confirmNext) return;
+            }
+
+            sfxLevelUp();
+            document.getElementById('btn-check-p1').style.display = 'none';
+            let part2 = document.getElementById('part2-section');
+            part2.style.display = 'block'; setTimeout(() => { part2.style.opacity = '1'; }, 100);
+            part2.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function checkPart2() {
+            let answered = document.querySelectorAll('.check-tf-p2 input[type="radio"]:checked').length;
+            if(answered < 16) {
+                let confirmNext = customConfirm(`Bạn mới chọn ${answered}/16 ý. Bạn có chắc chắn muốn đi tiếp sang Trạm 3 không?`);
+                if(!confirmNext) return;
+            }
+
+            sfxLevelUp();
+            document.getElementById('btn-check-p2').style.display = 'none';
+            let part3 = document.getElementById('part3-section');
+            part3.style.display = 'block'; setTimeout(() => { part3.style.opacity = '1'; }, 100);
+            part3.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function gradeFinal() {
+            quizStarted = false; 
+            if(typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+
+            let correctP1 = 0;
+            document.querySelectorAll('.check-mcq-p1').forEach(el => {
+                let ans = el.getAttribute('data-ans');
+                let selected = el.querySelector('input[type="radio"]:checked');
+                el.querySelectorAll('label').forEach(lbl => { lbl.style.borderColor = "#e5e7eb"; lbl.style.backgroundColor = "#fff"; });
+                
+                if (selected) {
+                    if (selected.value === ans) {
+                        selected.parentElement.style.borderColor = "var(--success)";
+                        selected.parentElement.style.backgroundColor = "#d1fae5";
+                        correctP1++;
+                    } else {
+                        selected.parentElement.style.borderColor = "var(--danger)";
+                        selected.parentElement.style.backgroundColor = "#fee2e2";
+                        el.querySelector(`input[value="${ans}"]`).parentElement.style.borderColor = "var(--success)";
+                    }
+                } else {
+                    el.querySelector(`input[value="${ans}"]`).parentElement.style.borderColor = "var(--success)";
+                }
+            });
+
+            let correctP2 = 0; 
+            document.querySelectorAll('.check-tf-p2').forEach(el => {
+                let ans = el.getAttribute('data-ans');
+                let selected = el.querySelector('input[type="radio"]:checked');
+                el.querySelectorAll('label').forEach(lbl => { lbl.style.backgroundColor = "#fff"; });
+                if (selected) {
+                    if (selected.value === ans) { selected.parentElement.style.backgroundColor = "#d1fae5"; correctP2++; } 
+                    else { selected.parentElement.style.backgroundColor = "#fee2e2"; }
+                }
+            });
+
+            let correctShort = 0;
+            document.querySelectorAll('.final-ans').forEach(el => {
+                let userVal = el.value.trim().toLowerCase();
+                let ansArr = el.getAttribute('data-ans').split('|');
+                if (ansArr.includes(userVal) && userVal !== "") {
+                    el.style.borderColor = "var(--success)"; el.style.backgroundColor = "#d1fae5"; correctShort++;
+                } else {
+                    el.style.borderColor = "var(--danger)"; el.style.backgroundColor = "#fee2e2";
+                    let fb = document.createElement("span");
+                    fb.className = "feedback err";
+                    fb.innerText = "✗ Đáp án đúng: " + ansArr[0];
+                    if(!el.nextElementSibling) el.parentNode.insertBefore(fb, el.nextSibling);
+                }
+            });
+
+            let totalItems = 18 + 16 + 6;
+            let totalCorrect = correctP1 + correctP2 + correctShort;
+            let finalScore = (totalCorrect / 40) * 10;
+
+            let board = document.getElementById('score-board');
+            board.style.display = 'block';
+            
+            sfxWin(); 
+            document.getElementById('score-text').innerHTML = `ĐIỂM TỔNG KẾT: ${finalScore.toFixed(2)} / 10<br><span style="font-size:1.1rem; color:#4b5563;">(Làm đúng ${totalCorrect}/40 manh mối)</span>`;
+            document.getElementById('error-breakdown').innerHTML = `<h4>📊 Báo cáo AI:</h4><ul>
+                <li><b>Trạm 1 (Trắc nghiệm nhiều lựa chọn):</b> Đúng ${correctP1}/18 câu</li>
+                <li><b>Trạm 2 (Phân tích Đúng/Sai):</b> Đúng ${correctP2}/16 ý</li>
+                <li><b>Trạm 3 (Trả lời ngắn):</b> Đúng ${correctShort}/6 câu</li>
+            </ul>`;
+
+            let webAppUrl = "https://script.google.com/macros/s/AKfycbxsDbcQ0qzbgIghhAyQEo7R8aKts6Ck_Zk9VX1babRVFSjLubFigwXrMmzvEJtCeOI6-A/exec"; 
+            let payload = {
+                hoTen: document.getElementById('studentName').value,
+                lop: document.getElementById('studentClass').value || "Không ghi",
+                diem: finalScore.toFixed(2),
+                cauDung: totalCorrect,
+                cauSai: 40 - totalCorrect,
+                cauChuaLam: 0,
+                tongSoCau: 40,
+                loi_hs1: 0, 
+                loi_hs2: 0,
+                loi_hs3: 0,
+                loi_hs4_mcq: 18 - correctP1,
+                loi_hs4_tf: 16 - correctP2,
+                loi_hs4_short: 6 - correctShort
+            };
+
+            let submitBtn = document.querySelector('.btn-submit');
+            submitBtn.innerText = "⏳ ĐANG LƯU DỮ LIỆU LÊN HỆ THỐNG...";
+            submitBtn.disabled = true;
+
+            fetch(webAppUrl, { method: 'POST', body: JSON.stringify(payload) })
+            .then(r => r.json()).then(data => { submitBtn.innerText = "✅ ĐÃ NỘP BÀI & LƯU ĐIỂM THÀNH CÔNG"; })
+            .catch(e => { submitBtn.innerText = "⚠️ CÓ LỖI MẠNG (CHƯA LƯU ĐƯỢC VÀO SHEETS)"; submitBtn.disabled = false; });
+        }
+
+        let quizStarted = false;
+        let isCheating = false;
+        let isAlerting = false; 
+
+        function customAlert(msg) {
+            isAlerting = true;
+            window.alert(msg);
+            setTimeout(() => { isAlerting = false; }, 1000); 
+        }
+
+        function customConfirm(msg) {
+            isAlerting = true;
+            let result = window.confirm(msg);
+            setTimeout(() => { isAlerting = false; }, 1000); 
+            return result;
+        }
+        
+        let timeLeft = 45 * 60; 
+        let timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    if(typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+                    customAlert("⏰ HẾT GIỜ LÀM BÀI! Hệ thống sẽ tự động nộp kết quả hiện tại.");
+                    gradeFinal();
+                    return;
+                }
+                timeLeft--;
+                let m = Math.floor(timeLeft / 60);
+                let s = timeLeft % 60;
+                document.getElementById('timer-box').innerText = `⏳ ${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+                if (timeLeft < 300) { document.getElementById('timer-box').style.color = "#ef4444"; }
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const startQuiz = () => { if(!quizStarted) { quizStarted = true; startTimer(); } };
+            document.body.addEventListener('click', startQuiz, {once: true});
+            document.body.addEventListener('touchstart', startQuiz, {once: true, passive: true});
+            document.body.addEventListener('input', startQuiz, {once: true});
+            document.body.addEventListener('keydown', startQuiz, {once: true});
+        });
+
+        function handleCheat() {
+            if (!quizStarted || isCheating || isAlerting) return; 
+            let nameInput = document.getElementById('studentName');
+            if (!nameInput.value.trim()) nameInput.value = "Kẻ ẩn danh";
+            isCheating = true;
+            if(typeof sfxWrong === 'function') sfxWrong();
+            customAlert(`🚨 CẢNH BÁO VI PHẠM QUY CHẾ THI! 🚨
+
+Hệ thống phát hiện bạn đã rời khỏi bài thi, chia đôi màn hình hoặc mở ứng dụng khác để tra cứu.
+
+Bài làm của bạn đã bị KHÓA LẬP TỨC và hệ thống đang tự động nộp kết quả 0 điểm về cho Giáo viên!`);
+            nameInput.value = "[GIAN LẬN] " + nameInput.value;
+            document.body.style.pointerEvents = "none";
+            document.getElementById('quizForm').style.filter = "grayscale(100%) blur(3px)";
+            document.getElementById('quizForm').style.opacity = "0.7";
+            gradeFinal();
+        }
+
+        document.addEventListener("visibilitychange", () => { if (document.visibilityState === 'hidden') handleCheat(); });
+        window.addEventListener("blur", () => { handleCheat(); });
+    </script>
+</body>
+</html>
